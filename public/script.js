@@ -1,67 +1,48 @@
-// Fetch the API key from the server
-async function getApiKey() {
-  const response = await fetch('/api-key');
-  const data = await response.json();
-  return data.apiKey;
+// Theme toggling logic
+const toggleButton = document.getElementById('toggle-theme');
+
+// Check for saved theme in localStorage and apply it
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
 }
 
-// Fetch wallpapers from Pexels API and display them on the page
-async function fetchWallpapers(query = 'Dark Car') {
-    try {
-      const apiKey = await getApiKey();
-      const randomPage = Math.floor(Math.random() * 100) + 1;
+toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
 
-      const response = await fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=9&page=${randomPage}`, {
-        headers: {
-          Authorization: apiKey
-        }
-      });
-      const data = await response.json();
-      displayWallpapers(data.photos);
+    // Save the theme preference in localStorage
+    if (document.body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+// Fetch and display wallpapers using Pexels API
+const API_KEY = 'YOUR_PEXELS_API_KEY'; // Replace with your API key
+const wallpaperContainer = document.getElementById('wallpaper');
+const refreshButton = document.getElementById('refresh-btn');
+const downloadButton = document.getElementById('download-btn');
+
+async function fetchWallpaper() {
+    try {
+        const response = await fetch('https://api.pexels.com/v1/search?query=nature&per_page=1', {
+            headers: {
+                Authorization: API_KEY
+            }
+        });
+
+        const data = await response.json();
+        const wallpaperUrl = data.photos[0].src.large;
+
+        wallpaperContainer.src = wallpaperUrl;
+        downloadButton.href = wallpaperUrl; // Set download link to the image URL
+        downloadButton.setAttribute('download', 'wallpaper.jpg');
     } catch (error) {
-      console.error('Error fetching wallpapers:', error);
+        console.error('Error fetching wallpaper:', error);
     }
 }
 
-// Display wallpapers in the grid
-function displayWallpapers(wallpapers) {
-  const wallpapersContainer = document.getElementById('wallpapers');
-  wallpapersContainer.innerHTML = ''; // Clear previous wallpapers
+refreshButton.addEventListener('click', fetchWallpaper);
 
-  wallpapers.forEach((photo) => {
-    const wallpaperCard = document.createElement('div');
-    wallpaperCard.classList.add('wallpaper-card');
-
-    const img = document.createElement('img');
-    img.src = photo.src.large;
-    img.alt = photo.photographer;
-    img.loading = "lazy"; // Lazy load images
-    img.addEventListener('click', () => {
-      window.open(photo.src.original, '_blank'); // Open original wallpaper in new tab
-    });
-
-    wallpaperCard.appendChild(img);
-    wallpapersContainer.appendChild(wallpaperCard);
-  });
-}
-
-// Refresh wallpapers on button click
-document.getElementById('refreshBtn').addEventListener('click', () => fetchWallpapers());
-
-// Handle search functionality
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const searchQuery = document.getElementById('searchInput').value;
-  if (searchQuery) {
-    fetchWallpapers(searchQuery);
-  }
-});
-
-// Theme toggle functionality
-document.getElementById('themeToggleBtn').addEventListener('click', () => {
-  document.body.classList.toggle('dark-theme');
-  const themeIcon = document.getElementById('themeIcon');
-  themeIcon.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙'; // Toggle between sun and moon icons
-});
-
-// Initial load
-fetchWallpapers();
+// Load an initial wallpaper on page load
+fetchWallpaper();
