@@ -25,6 +25,73 @@ body {
   font-size: 1.5em;
 }
 
+/* Floating Telegram Icon */
+.telegram-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #0088cc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+/* Telegram Icon */
+.telegram-float img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Floating Telegram Icon */
+.telegram-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #0088cc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+/* Telegram Icon */
+.telegram-float img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Tooltip Message - Always Visible */
+.telegram-tooltip {
+  position: absolute;
+  right: 75px; /* Adjust position */
+  background-color: #0088cc;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+/* Ensuring it's always visible */
+.telegram-float .telegram-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
 /* Search bar styling */
 .search-bar {
   margin: 20px 0;
